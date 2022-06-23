@@ -18,10 +18,12 @@ abstract class model{
     }
 
     public function show_fields(){
-        $req = $this->db->query("Show fields from $this->table");$i = 0; $t="";
+        $req = $this->db->query("Show fields from $this->table");
+        $req2 = $this->db->query("Show fields from $this->table");$i = 0; $t="";
+        $all = $req2->fetchAll();
         while($a = $req->fetch()){
             $i = $i + 1;
-            if($i === sizeof($a)){
+            if($i === sizeof($all)){
                 $t .= $a['Field'];
             }else{
                 $t .= $a['Field'].',';

@@ -49,7 +49,7 @@ class proprietaire extends controller{
         if($this->connected()){
             $db = new appartements();
             $req = $db->findWhere('id_pro=?', [$_SESSION['id']]);
-            $e["dt"] = $req->fetch();
+            $e["dt"] = $req->fetchAll();
             $this->set($e);
             $this->render('dashboard');
         }
@@ -70,7 +70,7 @@ class proprietaire extends controller{
     }
 
     public function de(){
-        $model = new proprietaires();
-        $req = $model->show_fields();
+        $model = new appartements();
+        echo $model->show_fields();
     }
 }
