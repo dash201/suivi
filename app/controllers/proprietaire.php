@@ -1,9 +1,10 @@
 <?php 
 namespace controllers;
-use core\controller;
 use core\auth;
-use models\proprietaires;
+use core\controller;
 use models\appartements;
+use models\proprietaires;
+use models\locataires;
 
 class proprietaire extends controller{
 
@@ -67,6 +68,18 @@ class proprietaire extends controller{
             $d->add('?,?,?,?,?,?,?,?', array($_POST['designation'],$_POST['chambre'],$_POST['douche'],$_POST['salon'],$_POST['cuisine'],$_POST['wc'],$_POST['info_sup'],$_SESSION['id']));
             header('location:'.WEBROOT.'proprietaire/dashboard');
         }
+    }
+
+    public function locataire(string $param){
+        $model = new locataires();
+        $e['apt'] = $param;
+        $this->set($e);
+        $this->render('gestion_locataire');
+    }
+
+    public function ajouter_locataire(){
+        $model = new locataires();
+        $model->add_loc('mail, mdp,id_pro,id_apt','?,?,?,?', [$_POST["mail"], $_POST["mdp"], $_SESSION["id"], $_POST["hide"]]);
     }
 
     public function de(){

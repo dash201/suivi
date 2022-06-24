@@ -4,6 +4,6 @@
     <?php
 
  foreach($dt as $d):?>
-        <tr><td><?=$d['designation']?></td> <td><a href="<?=WEBROOT?>proprietaire/locataire">gerer locataire</a></td> <td><a>voir</a></td></tr>
+        <tr><td><?=$d['designation']?></td> <td><a href="<?=WEBROOT?>proprietaire/locataire/<?=$d['id_apt']?>">gerer locataire</a></td> <td><a>voir</a></td></tr>
     <?php endForeach?>
 </table>
