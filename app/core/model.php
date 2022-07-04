@@ -65,4 +65,9 @@ abstract class model{
         $req = $this->db->prepare("DELETE FROM $this->table WHERE $condition");
         $req->execute($array);
     }
+
+    public function update(string $field, string $condition, array $array){
+        $req = $this->db->prepare("UPDATE $this->table SET $field WHERE $condition");
+        $req->execute($array);
+    }
 }
