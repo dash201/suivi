@@ -5,6 +5,7 @@ use core\controller;
 use models\appartements;
 use models\proprietaires;
 use models\locataires;
+use models\suivis;
 
 class proprietaire extends controller{
 
@@ -71,15 +72,31 @@ class proprietaire extends controller{
     }
 
     public function locataire(string $param){
-        $model = new locataires();
-        $e['apt'] = $param;
-        $this->set($e);
-        $this->render('gestion_locataire');
+        if($this->connected()){
+            $model = new locataires();
+            $dt = $model->findWhere('id_apt=? and statut_loc="activer"', [$param]);
+            $e['dt']=$dt->fetch();
+            $e['apt'] = $param;
+            $this->set($e);
+            $this->render('gestion_locataire');
+        }
     }
 
     public function ajouter_locataire(){
-        $model = new locataires();
-        $model->add_loc('mail, mdp,id_pro,id_apt','?,?,?,?', [$_POST["mail"], $_POST["mdp"], $_SESSION["id"], $_POST["hide"]]);
+        if($this->connected()){
+            $model = new locataires(); $suivi = new suivis();
+            $req = $model->add_loc('statut_loc,mail, mdp,id_pro,id_apt','?,?,?,?,?', ['activer',$_POST["mail"], password_hash($_POST["mdp"], PASSWORD_DEFAULT), $_SESSION["id"], $_POST["hide"]]);
+            $suivi->add_suivi('date_deb, statut_svs, id_pro,id_loc','?,?,?,?',[date('Y-m-d'),'paye',$_SESSION['id'],$req]);
+            header('location:'.WEBROOT.'proprietaire/locataire/'.$_POST['hide']);
+        }
+    }
+
+    public function modifier_echeance(){
+        if($this->connected()){
+            $suivi = new suivis();
+            $suivi->update('date_ech=?', 'id_loc=?', [$_POST['date'],$_POST['hide']]);
+            header('location:'.WEBROOT.'proprietaire/dashboard');
+        }
     }
 
     public function de(){
